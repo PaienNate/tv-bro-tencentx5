@@ -98,7 +98,8 @@ android {
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-
+    //Add Tencent X5 Core
+    api("com.tencent.tbs:tbssdk:44275")
     implementation("androidx.appcompat:appcompat:1.5.1")
     implementation("androidx.webkit:webkit:1.5.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
