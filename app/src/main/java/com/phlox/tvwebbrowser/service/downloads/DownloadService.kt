@@ -13,7 +13,6 @@ import android.os.Looper
 import android.provider.Settings
 import android.text.format.Formatter
 import android.util.Log
-import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.content.FileProvider
@@ -24,6 +23,8 @@ import com.phlox.tvwebbrowser.model.Download
 import com.phlox.tvwebbrowser.model.DownloadIntent
 import com.phlox.tvwebbrowser.singleton.AppDatabase
 import com.phlox.tvwebbrowser.utils.activemodel.ActiveModelsRepository
+import com.tencent.smtt.sdk.MimeTypeMap
+
 import java.io.File
 import java.util.*
 import java.util.concurrent.Executors
@@ -58,6 +59,7 @@ class DownloadService : Service() {
             AppDatabase.db.downloadDao().update(task.downloadInfo)
             handler.post {
                 model.notifyListenersAboutError(task, responseCode, responseMessage)
+
                 onTaskEnded(task)
             }
         }

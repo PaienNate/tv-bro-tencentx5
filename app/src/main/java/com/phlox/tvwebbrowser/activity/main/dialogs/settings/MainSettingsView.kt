@@ -6,7 +6,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.webkit.WebView
+
 import android.widget.*
 import androidx.fragment.app.FragmentActivity
 import androidx.webkit.WebViewFeature
@@ -17,6 +17,7 @@ import com.phlox.tvwebbrowser.activity.main.SettingsModel
 import com.phlox.tvwebbrowser.databinding.ViewSettingsMainBinding
 import com.phlox.tvwebbrowser.utils.activemodel.ActiveModelsRepository
 import com.phlox.tvwebbrowser.utils.activity
+import com.tencent.smtt.sdk.WebView
 import java.text.SimpleDateFormat
 import java.util.*
 

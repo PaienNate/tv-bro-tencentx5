@@ -12,8 +12,6 @@
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:
--dontwarn dalvik.**
--dontwarn com.tencent.smtt.**
 -keepclassmembers class com.phlox.tvwebbrowser.model.** {
    public *;
 }
@@ -21,9 +19,14 @@
    public *;
    private *;
 }
+# 腾讯X5
+-dontwarn dalvik.**
+-dontwarn com.tencent.smtt.**
+
 -keep class com.tencent.smtt.** {
     *;
 }
+
 -keep class com.tencent.tbs.** {
     *;
 }

@@ -23,7 +23,7 @@
 package com.phlox.tvwebbrowser.utils
 
 import android.net.Uri
-import android.webkit.MimeTypeMap
+import com.tencent.smtt.sdk.MimeTypeMap
 
 import java.io.ByteArrayOutputStream
 import java.io.UnsupportedEncodingException

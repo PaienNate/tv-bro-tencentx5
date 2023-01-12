@@ -1,17 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.phlox.tvwebbrowser">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!--  debugtbs.qq.com 安装线上内核需要权限 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29"/>
+    <uses-permission
+        android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <!--  写入tbslog.txt需要权限，否则通过QbSdk.setTbsLogClient()接管解决  -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <!--  WebView定位功能权限  -->
+
+    <!--  粗略定位权限，允许一个程序通过网络获取粗略的位置  -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!--  精确定位权限，允许一个程序访问精确位置(GPS定位)  -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+
 
     <uses-feature
         android:name="android.hardware.touchscreen"
@@ -34,17 +52,6 @@
         android:name="android.software.leanback"
         android:required="false" />
 
-    <queries>
-        <intent>
-            <action android:name="android.intent.action.VIEW" />
-            <data android:scheme="https" />
-        </intent>
-        <intent>
-            <action android:name="android.intent.action.VIEW" />
-            <data android:scheme="http" />
-        </intent>
-    </queries>
-
     <application
         android:name=".TVBro"
         android:allowBackup="true"
@@ -57,16 +64,16 @@
         android:screenOrientation="sensor"
         android:theme="@style/AppTheme"
         android:requestLegacyExternalStorage="true"
-        android:extractNativeLibs="${extractNativeLibs}">
+        tools:targetApi="m">
         <activity
             android:name=".activity.main.MainActivity"
+            android:exported="true"
             android:banner="@drawable/banner"
             android:icon="@drawable/ic_launcher"
             android:label="@string/app_name_short"
             android:launchMode="singleTask"
             android:configChanges="uiMode"
-            android:logo="@drawable/banner"
-            android:exported="true">
+            android:logo="@drawable/banner">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -111,14 +118,17 @@
         <service
             android:name=".service.downloads.DownloadService">
         </service>
-
-        <provider
-            android:name="androidx.core.content.FileProvider"
+<!--        添加X5内核Service-->
+        <service
+            android:name="com.tencent.smtt.export.external.DexClassLoaderProviderService"
+            android:label="dexopt"
+            android:process=":dexopt" >
+        </service>
+        <provider android:name="com.tencent.smtt.utils.FileProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths"/>
         </provider>
     </application>

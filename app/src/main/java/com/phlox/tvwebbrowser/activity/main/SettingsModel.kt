@@ -27,8 +27,8 @@ class SettingsModel : ActiveModel() {
     val config = TVBro.config
 
     //Search engines configuration
-    val SearchEnginesTitles = arrayOf("Google", "Bing", "Yahoo!", "DuckDuckGo", "Yandex", "Custom")
-    val SearchEnginesURLs = listOf("https://www.google.com/search?q=[query]", "https://www.bing.com/search?q=[query]",
+    val SearchEnginesTitles = arrayOf("Baidu", "茶杯狐","Bing", "Yahoo!", "DuckDuckGo", "Yandex", "Custom")
+    val SearchEnginesURLs = listOf("https://www.baidu.com/s?wd=[query]", "https://cupfox.app/s/[query]","https://www.bing.com/search?q=[query]",
             "https://search.yahoo.com/search?p=[query]", "https://duckduckgo.com/?q=[query]",
             "https://yandex.com/search/?text=[query]", "")
     var searchEngineURL = ObservableValue(config.getSearchEngineURL())
@@ -36,7 +36,19 @@ class SettingsModel : ActiveModel() {
     var setSearchEngineAsHomePage: Boolean = config.getSearchEngineAsHomePage()
     var homePage = ObservableValue(config.getHomePage())
     //User agent strings configuration
-    val userAgentStringTitles = arrayOf("TV Bro", "Chrome (Desktop)", "Chrome (Mobile)", "Chrome (Tablet)", "Firefox (Desktop)", "Firefox (Tablet)", "Edge (Desktop)", "Safari (Desktop)", "Safari (iPad)", "Apple TV", "Custom")
+    val userAgentStringTitles = arrayOf("TV Bro[原WebView字符串]",
+        "Chrome (桌面版)",
+        "Chrome (移动端)",
+        "Chrome (平板)",
+        "Firefox (桌面版)",
+        "Firefox (平板)",
+        "Edge (桌面版)",
+        "Safari (桌面版)",
+        "Safari (iPad)",
+        "Apple TV",
+        "淘宝 Lite" ,
+        "百度app＋chillin(来源酷安)",
+        "custom")
     val uaStrings = listOf("",
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36",
             "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Mobile Safari/537.36",
@@ -47,7 +59,9 @@ class SettingsModel : ActiveModel() {
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15",
             "Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1",
             "AppleTV6,2/11.1",
-            "")
+            "Mozilla/5.0 (Linux; U; Android 9; zh-CN; Mi Note 3 Build/PKQ1.181007.001) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/69.0.3497.100 UWS/3.21.0.103 Mobile Safari/537.36 AliApp(HTAO/4.12.1) UCBS/2.11.1.1 TTID/212200@htao_android_4.12.1",
+        "Mozilla/5.0 (Linux; Android 9; Mi Note 3 Build/PKQ1.181007.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/102.0.5005.50 Mobile Safari/537.36 SP-engine/2.31.0 bdapp/1.0 (baiduboxvision; baiduboxvision) baiduboxvision/2.0.0.10 (Baidu; P1 9)",
+        "")
     var uaString = ObservableValue(config.getUserAgentString())
     //Version & updates configuration
     var needToShowUpdateDlgAgain: Boolean = false

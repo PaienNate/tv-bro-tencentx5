@@ -3,6 +3,8 @@ package com.phlox.tvwebbrowser.model
 import android.content.Context
 import android.net.http.SslError
 import android.webkit.JavascriptInterface
+
+
 import com.phlox.tvwebbrowser.R
 import com.phlox.tvwebbrowser.TVBro
 import com.phlox.tvwebbrowser.activity.main.MainActivity

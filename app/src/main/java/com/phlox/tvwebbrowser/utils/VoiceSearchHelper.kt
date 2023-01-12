@@ -10,6 +10,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.net.Uri
+
 import android.os.Build
 import android.os.Bundle
 import android.speech.RecognitionListener

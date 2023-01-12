@@ -11,7 +11,6 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.media.MediaDrm
 import android.net.Uri
-import android.net.http.SslError
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
@@ -21,17 +20,17 @@ import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
-import android.webkit.*
 import android.widget.FrameLayout
 import android.widget.PopupMenu
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import com.phlox.tvwebbrowser.Config
 import com.phlox.tvwebbrowser.R
 import com.phlox.tvwebbrowser.model.AndroidJSInterface
 import com.phlox.tvwebbrowser.utils.LogUtils
+import com.tencent.smtt.export.external.interfaces.*
+import com.tencent.smtt.sdk.*
 import java.net.URLEncoder
 import java.util.*
 
@@ -52,7 +51,7 @@ class WebViewEx(context: Context, val callback: Callback, val jsInterface: Andro
 
     private var genericInjects: String? = null
     private var webChromeClient_: WebChromeClient
-    private var fullscreenViewCallback: WebChromeClient.CustomViewCallback? = null
+    private var fullscreenViewCallback: IX5WebChromeClient.CustomViewCallback? = null
     private var pickFileCallback: ValueCallback<Array<Uri>>? = null
     private var actionsMenu: PopupMenu? = null
     private var lastTouchX: Int = 0
@@ -61,7 +60,7 @@ class WebViewEx(context: Context, val callback: Callback, val jsInterface: Andro
     private var webPermissionsRequest: PermissionRequest? = null
     private var requestedWebResourcesThatDoNotNeedToGrantAndroidPermissions: ArrayList<String>? = null
     private var geoPermissionOrigin: String? = null
-    private var geoPermissionsCallback: GeolocationPermissions.Callback? = null
+    private var geoPermissionsCallback: GeolocationPermissionsCallback? = null
     var lastSSLError: SslError? = null
     var trustSsl: Boolean = false
     private var currentOriginalUrl: Uri? = null
@@ -123,36 +122,34 @@ class WebViewEx(context: Context, val callback: Callback, val jsInterface: Andro
             setNeedInitialFocus(false)
 
             allowFileAccess = true
-            allowFileAccessFromFileURLs = true
-            allowUniversalAccessFromFileURLs = true
+            //allowFileAccessFromFileURLs = true
+           // allowUniversalAccessFromFileURLs = true
+            // Use this to instead.
+            setAllowFileAccessFromFileURLs(true)
+            setAllowUniversalAccessFromFileURLs(true)
             domStorageEnabled = true
+            //强制缩放
+            settingsExtension.setForcePinchScaleEnabled(true);
+            //前进后退缓存
+            settingsExtension.setContentCacheEnable(true);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                if (WebViewFeature.isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING)) {
-                    when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-                        Configuration.UI_MODE_NIGHT_YES -> {
-                            WebSettingsCompat.setAlgorithmicDarkeningAllowed(this, true)
-                        }
-                        Configuration.UI_MODE_NIGHT_NO, Configuration.UI_MODE_NIGHT_UNDEFINED -> {
-                            WebSettingsCompat.setAlgorithmicDarkeningAllowed(this, false)
-                        }
+
+            //腾讯X5提供了内置的方式去实现深色模式，所以我们直接用
+            if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK) && settingsExtension!=null) {
+                when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        settingsExtension.setDayOrNight(false);
                     }
-                }
-            } else {
-                if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
-                    when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-                        Configuration.UI_MODE_NIGHT_YES -> {
-                            WebSettingsCompat.setForceDark(this, WebSettingsCompat.FORCE_DARK_ON)
-                        }
-                        Configuration.UI_MODE_NIGHT_NO, Configuration.UI_MODE_NIGHT_UNDEFINED -> {
-                            WebSettingsCompat.setForceDark(this, WebSettingsCompat.FORCE_DARK_OFF)
-                        }
-                        else -> {
-                            WebSettingsCompat.setForceDark(this, WebSettingsCompat.FORCE_DARK_AUTO)
-                        }
+                    Configuration.UI_MODE_NIGHT_NO, Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        settingsExtension.setDayOrNight(true);
+                    }
+                    else -> {
+                        //默认是日间模式
+                        settingsExtension.setDayOrNight(true);
                     }
                 }
             }
+
         }
 
         /*scrollBarStyle = WebView.SCROLLBARS_OUTSIDE_OVERLAY
@@ -194,7 +191,7 @@ class WebViewEx(context: Context, val callback: Callback, val jsInterface: Andro
                 } else super.onJsPrompt(view, url, message, defaultValue, result)
             }
 
-            override fun onShowCustomView(view: View, callback: CustomViewCallback) {
+            override fun onShowCustomView(view: View, callback: IX5WebChromeClient.CustomViewCallback) {
                 this@WebViewEx.callback.onShowCustomView(view)
                 fullscreenViewCallback = callback
             }
@@ -285,7 +282,7 @@ class WebViewEx(context: Context, val callback: Callback, val jsInterface: Andro
                 webPermissionsRequest = null
             }
 
-            override fun onGeolocationPermissionsShowPrompt(origin: String, callback: GeolocationPermissions.Callback) {
+            override fun onGeolocationPermissionsShowPrompt(origin: String, callback: GeolocationPermissionsCallback) {
                 val activity = this@WebViewEx.callback.getActivity() ?: return
                 geoPermissionOrigin = origin
                 geoPermissionsCallback = callback
@@ -402,6 +399,7 @@ class WebViewEx(context: Context, val callback: Callback, val jsInterface: Andro
                 //Log.d(TAG, "onLoadResource url: $url")
             }
 
+            //重写成功修改error属性
             override fun onReceivedSslError(view: WebView, handler: SslErrorHandler, error: SslError) {
                 Log.e(TAG, "onReceivedSslError url: ${error.url}")
                 if (trustSsl && lastSSLError?.certificate?.toString()?.equals(error.certificate.toString()) == true) {
@@ -478,6 +476,7 @@ class WebViewEx(context: Context, val callback: Callback, val jsInterface: Andro
                 }
                 it.show()
             }
+            actionsMenu!!.show()
         }
     }
 

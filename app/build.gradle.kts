@@ -5,8 +5,8 @@ plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
-    id("com.google.gms.google-services")
-    id("com.google.firebase.crashlytics")
+/*    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")*/
 }
 
 val properties = Properties()
@@ -51,20 +51,20 @@ android {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             signingConfig=signingConfigs.getByName("release")
-            project.setProperty("crashlytics", true)
+            project.setProperty("crashlytics", false)
         }
     }
 
     flavorDimensions += listOf("appstore")
     productFlavors {
         create("generic") {
-            dimension = "appstore"
+            //dimension = "appstore"
             buildConfigField("Boolean", "BUILT_IN_AUTO_UPDATE", "true")
             //when distributing as an apk, the size of the distribution apk is more
             //important than the size after installation
             manifestPlaceholders["extractNativeLibs"] = "true"
         }
-        create("google") {
+/*        create("google") {
             dimension = "appstore"
             //now auto-update violates Google Play policies
             buildConfigField("Boolean", "BUILT_IN_AUTO_UPDATE", "false")
@@ -74,7 +74,7 @@ android {
             dimension = "appstore"
             buildConfigField("Boolean", "BUILT_IN_AUTO_UPDATE", "false")
             manifestPlaceholders["extractNativeLibs"] = "true"
-        }
+        }*/
     }
 
     buildFeatures {
@@ -98,7 +98,6 @@ android {
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    //Add Tencent X5 Core
     api("com.tencent.tbs:tbssdk:44275")
     implementation("androidx.appcompat:appcompat:1.5.1")
     implementation("androidx.webkit:webkit:1.5.0")

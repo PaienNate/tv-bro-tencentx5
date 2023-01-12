@@ -8,11 +8,11 @@ import android.os.ParcelFileDescriptor.AutoCloseOutputStream
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
-import android.webkit.CookieManager
 import com.phlox.tvwebbrowser.TVBro
 import com.phlox.tvwebbrowser.model.Download
 import com.phlox.tvwebbrowser.singleton.AppDatabase
 import com.phlox.tvwebbrowser.utils.DownloadUtils
+import com.tencent.smtt.sdk.CookieManager
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL

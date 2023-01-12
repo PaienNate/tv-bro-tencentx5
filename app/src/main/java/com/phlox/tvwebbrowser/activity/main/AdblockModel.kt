@@ -2,13 +2,16 @@ package com.phlox.tvwebbrowser.activity.main
 
 import android.content.Context
 import android.net.Uri
-import android.webkit.WebResourceRequest
 import android.widget.Toast
+
+
 import com.brave.adblock.AdBlockClient
-import com.brave.adblock.Utils
+
 import com.phlox.tvwebbrowser.TVBro
+import com.phlox.tvwebbrowser.utils.BraveForX5BridgeUtil
 import com.phlox.tvwebbrowser.utils.observable.ObservableValue
 import com.phlox.tvwebbrowser.utils.activemodel.ActiveModel
+import com.tencent.smtt.export.external.interfaces.WebResourceRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -89,11 +92,12 @@ class AdblockModel : ActiveModel() {
         clientLoading.value = false
     }
 
+    //Fix X5-Ad with bridge.
     fun isAd(request: WebResourceRequest, baseUri: Uri): Boolean {
         val client = client ?: return false
         val baseHost = baseUri.host
         val filterOption = try {
-            Utils.mapRequestToFilterOption(request)
+            BraveForX5BridgeUtil.mapRequestToFilterOption(request)
         } catch (e: Exception) {
             return false
         }

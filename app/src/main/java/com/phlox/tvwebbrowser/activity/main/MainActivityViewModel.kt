@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Environment
 import android.util.Log
-import android.webkit.WebView
 import android.widget.Toast
 import com.phlox.tvwebbrowser.Config
 import com.phlox.tvwebbrowser.R
@@ -19,6 +18,7 @@ import com.phlox.tvwebbrowser.utils.Utils
 import com.phlox.tvwebbrowser.utils.observable.ObservableList
 import com.phlox.tvwebbrowser.utils.observable.ParameterizedEventSource
 import com.phlox.tvwebbrowser.utils.activemodel.ActiveModel
+import com.tencent.smtt.sdk.WebView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

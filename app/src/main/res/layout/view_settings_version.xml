@@ -46,11 +46,18 @@
         tools:text="WebView Version: 10.0.1" />
 
     <TextView
+        android:id="@+id/tvDebug"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvWebViewVersion"
+        tools:text="Open X5 DebugTools(进入X5内核调试页)" />
+
+    <TextView
         android:id="@+id/tvUkraine"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_below="@+id/tvWebViewVersion"
+        android:layout_below="@+id/tvDebug"
         android:text="@string/why_icon_changed"
         android:lines="1"
         android:ellipsize="end"
@@ -59,11 +66,12 @@
         android:clickable="true"/>
 
     <ImageView
+        android:id="@+id/tvUkraineImg"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginStart="10dp"
         android:src="@drawable/banner"
-        android:layout_below="@+id/tvWebViewVersion"
+        android:layout_below="@+id/tvDebug"
         android:layout_toEndOf="@+id/tvUkraine" />
 
     <CheckBox

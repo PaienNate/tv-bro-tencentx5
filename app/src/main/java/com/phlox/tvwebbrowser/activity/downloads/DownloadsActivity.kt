@@ -11,7 +11,6 @@ import android.provider.Settings
 import android.util.Log
 import android.view.Gravity
 import android.view.View
-import android.webkit.MimeTypeMap
 import android.widget.AbsListView
 import android.widget.AdapterView
 import android.widget.PopupMenu
@@ -25,6 +24,7 @@ import com.phlox.tvwebbrowser.databinding.ActivityDownloadsBinding
 import com.phlox.tvwebbrowser.model.Download
 import com.phlox.tvwebbrowser.utils.Utils
 import com.phlox.tvwebbrowser.utils.activemodel.ActiveModelsRepository
+import com.tencent.smtt.sdk.MimeTypeMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File

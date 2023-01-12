@@ -20,6 +20,9 @@ import com.phlox.tvwebbrowser.activity.main.SettingsModel
 import com.phlox.tvwebbrowser.databinding.ViewSettingsVersionBinding
 import com.phlox.tvwebbrowser.utils.activemodel.ActiveModelsRepository
 import com.phlox.tvwebbrowser.utils.activity
+import com.tencent.smtt.sdk.WebView.getTbsCoreVersion
+import com.tencent.smtt.sdk.WebView.getTbsSDKVersion
+import java.lang.StringBuilder
 
 @SuppressLint("SetTextI18n")
 class VersionSettingsView @JvmOverloads constructor(
@@ -35,14 +38,22 @@ class VersionSettingsView @JvmOverloads constructor(
 
     init {
         vb.tvVersion.text = context.getString(R.string.version_s, BuildConfig.VERSION_NAME)
-
+        val X5Version = getTbsCoreVersion(context)
+        val X5SDKVersion = getTbsSDKVersion(context)
+        val X5All = X5Version.toString() + " SDK Version:" + X5SDKVersion.toString()
         val webViewPackage = WebViewCompat.getCurrentWebViewPackage(context)
         val webViewVersion = (webViewPackage?.packageName ?: "unknown") + ":" + (webViewPackage?.versionName ?: "unknown")
-        vb.tvWebViewVersion.text = webViewVersion
-
+        vb.tvWebViewVersion.text = webViewVersion + "  X5 Core Version:" + X5All
         vb.tvLink.text = Html.fromHtml("<p><u>https://github.com/truefedex/tv-bro</u></p>")
         vb.tvLink.setOnClickListener {
             loadUrl(vb.tvLink.text.toString())
+        }
+        vb.tvDebug.setOnClickListener {
+            loadUrl("http://debugx5.qq.com")
+        }
+        if(X5Version == 0)
+        {
+            vb.tvDebug.text = "Open debugx5 to install core(Chinese)"
         }
 
         vb.tvUkraine.setOnClickListener {

@@ -21,8 +21,8 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
-import android.webkit.*
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
@@ -46,6 +46,14 @@ import com.phlox.tvwebbrowser.utils.*
 import com.phlox.tvwebbrowser.utils.activemodel.ActiveModelsRepository
 import com.phlox.tvwebbrowser.widgets.NotificationView
 import kotlinx.coroutines.*
+import com.tencent.smtt.export.external.TbsCoreSettings
+import com.tencent.smtt.export.external.interfaces.WebResourceRequest
+import com.tencent.smtt.sdk.*
+import com.tencent.smtt.sdk.QbSdk.getX5CoreLoadHelp
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Runnable
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.UnsupportedEncodingException
 import java.net.URL
@@ -564,6 +572,7 @@ open class MainActivity : AppCompatActivity(), ActionBar.Callback {
         vb.ibZoomIn.isEnabled = tab.webView?.canZoomIn() == true
         vb.ibZoomOut.isEnabled = tab.webView?.canZoomOut() == true
 
+        
         val adblockEnabled = tab.adblock ?: adblockModel.adBlockEnabled
         vb.ibAdBlock.setImageResource(if (adblockEnabled) R.drawable.ic_adblock_on else R.drawable.ic_adblock_off)
         vb.tvBlockedAdCounter.visibility = if (adblockEnabled && tab.blockedAds != 0) View.VISIBLE else View.GONE
@@ -1031,6 +1040,7 @@ open class MainActivity : AppCompatActivity(), ActionBar.Callback {
             vb.vTabs.onTabTitleUpdated(tab)
         }
 
+        @RequiresApi(Build.VERSION_CODES.M)
         override fun requestPermissions(array: Array<String>, geo: Boolean) {
             requestPermissions(array, if (geo) MY_PERMISSIONS_REQUEST_WEB_PAGE_GEO_PERMISSIONS else MY_PERMISSIONS_REQUEST_WEB_PAGE_PERMISSIONS)
         }
@@ -1205,7 +1215,9 @@ open class MainActivity : AppCompatActivity(), ActionBar.Callback {
                 val zoomBy = tabScale / newScale
                 Log.d(TAG, "Auto zoom by: $zoomBy")
                 tab.changingScale = true
-                tab.webView?.zoomBy(zoomBy)
+                //第一次尝试替代，目前不清楚会造成什么影响
+                Log.d(TAG, oldScale.toString() + "转换为" + newScale.toString())
+                tab.webView?.setInitialScale(((100*newScale).toInt()))
             }
         }
 
